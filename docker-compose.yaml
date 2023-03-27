@@ -2,9 +2,9 @@ version: '3.4'
 
 services:
 
-  postgres_shop:
+  postgres_container:
     image: postgres:13.8
-    container_name: postgres_shop
+    container_name: postgres_container
     environment:
       POSTGRES_USER: admin
       POSTGRES_PASSWORD: admin

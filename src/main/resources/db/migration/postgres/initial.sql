@@ -8,29 +8,19 @@ $$ language sql;
 -----------------------------------
 CREATE TABLE IF NOT EXISTS t_case
 (
-    id              BIGSERIAL PRIMARY KEY NOT NULL,
-    category        VARCHAR(255)          NOT NULL UNIQUE,
-    name            VARCHAR(255)          NOT NULL UNIQUE,
-    model_id        BIGINT                NOT NULL,
-    price           BIGINT                NOT NULL,
-    stock_quantity  BIGINT                NOT NULL,
-    description     TEXT                  NOT NULL,
-
-    CONSTRAINT fk_model_id
-        FOREIGN KEY (model_id)
-            REFERENCES t_case_model(id)
-);
-
-CREATE TABLE IF NOT EXISTS t_case_model
-(
     id                      BIGSERIAL PRIMARY KEY NOT NULL,
-    color                   VARCHAR(255)          NOT NULL UNIQUE,
-    device_manufacturer     VARCHAR(255)          NOT NULL UNIQUE,
-    device_model            VARCHAR(255)          NOT NULL UNIQUE,
+    category                VARCHAR(255)          NOT NULL,
+    name                    VARCHAR(255)          NOT NULL,
+    color                   VARCHAR(255)          NOT NULL,
+    device_manufacturer     VARCHAR(255)          NOT NULL,
+    device_model            VARCHAR(255)          NOT NULL,
+    price                   BIGINT                NOT NULL,
+    stock_quantity          BIGINT                NOT NULL,
+    description             TEXT                  NOT NULL,
     is_on_sale              BOOLEAN DEFAULT FALSE NOT NULL,
 
     CONSTRAINT unique_set
-        UNIQUE (color, device_manufacturer, device_model)
+        UNIQUE (category, name, color, device_manufacturer, device_model)
 );
 
 CREATE TABLE IF NOT EXISTS t_feedback
@@ -41,6 +31,9 @@ CREATE TABLE IF NOT EXISTS t_feedback
     rating          INTEGER               NOT NULL,
     description     TEXT                  NOT NULL,
     photo_set_id    BIGINT                NULL,
+
+    CONSTRAINT unique_set
+        UNIQUE (user_id, case_id),
 
     CONSTRAINT rating_value
         CHECK (rating >= 1 AND rating <= 5),
@@ -87,8 +80,10 @@ CREATE TABLE IF NOT EXISTS t_user
 CREATE TABLE IF NOT EXISTS t_role
 (
     id           BIGSERIAL PRIMARY KEY NOT NULL,
-    type         VARCHAR(64)           NOT NULL UNIQUE,
-    description  TEXT                  NULL
+    type         VARCHAR(64)           NOT NULL,
+    description  TEXT                  NULL,
+
+    CHECK ( type in ('OWNER', 'ADMIN', 'USER'))
 );
 
 CREATE TABLE IF NOT EXISTS t_order
@@ -97,7 +92,8 @@ CREATE TABLE IF NOT EXISTS t_order
     case_id                 BIGINT                NOT NULL,
     quantity                BIGINT                NOT NULL,
     discount                BIGINT                NOT NULL,
-    checkout                BIGINT                NOT NULL,
+    sum_checkout            BIGINT                NOT NULL,
+    datetime                TIMESTAMP             NOT NULL,
     shipping_service_id     BIGINT                NOT NULL,
 
     CONSTRAINT fk_case_id
@@ -116,38 +112,20 @@ CREATE TABLE IF NOT EXISTS t_address
 (
     id                  BIGSERIAL PRIMARY KEY NOT NULL,
     country_id          BIGINT                NOT NULL,
-    city_id             BIGINT                NOT NULL,
-    street_id           BIGINT                NOT NULL,
+    city_name           VARCHAR(255)          NOT NULL,
+    street_name         VARCHAR(255)          NOT NULL,
 
     CONSTRAINT fk_country_id
         FOREIGN KEY(country_id)
-            REFERENCES t_country(id),
-
-    CONSTRAINT fk_city_id
-        FOREIGN KEY(city_id)
-            REFERENCES t_city(id),
-
-    CONSTRAINT fk_street_id
-        FOREIGN KEY(street_id)
-            REFERENCES t_street(id)
+            REFERENCES t_country(id)
 );
 
 CREATE TABLE IF NOT EXISTS t_country
 (
-    id      BIGSERIAL PRIMARY KEY   NOT NULL,
-    name    VARCHAR(255)            NOT NULL UNIQUE
-);
-
-CREATE TABLE IF NOT EXISTS t_city
-(
-    id      BIGSERIAL PRIMARY KEY   NOT NULL,
-    name    VARCHAR(255)            NOT NULL
-);
-
-CREATE TABLE IF NOT EXISTS t_street
-(
-    id      BIGSERIAL PRIMARY KEY   NOT NULL,
-    name    VARCHAR(255)            NOT NULL
+    id              BIGSERIAL PRIMARY KEY   NOT NULL,
+    country_name    VARCHAR(255)            NOT NULL UNIQUE,
+    iso_code_2      VARCHAR(255)            NOT NULL UNIQUE,
+    iso_code_3      VARCHAR(255)            NOT NULL UNIQUE
 );
 
 CREATE TABLE IF NOT EXISTS t_shipping_service
@@ -167,17 +145,24 @@ CREATE TABLE IF NOT EXISTS t_shipping_service
 -----------------------------------
 CREATE TABLE IF NOT EXISTS t_social_media
 (
-    id          BIGSERIAL PRIMARY KEY NOT NULL,
-    name        VARCHAR(50)           NOT NULL UNIQUE,
-    media_url   VARCHAR(255)          NOT NULL,
-    icon_url    VARCHAR(255)          NOT NULL
+    id                       BIGSERIAL PRIMARY KEY NOT NULL,
+    social_media_name        VARCHAR(50)           NOT NULL UNIQUE,
+    media_url                VARCHAR(255)          NOT NULL,
+    icon_url                 VARCHAR(255)          NOT NULL
 );
 
-CREATE TABLE IF NOT EXISTS t_documents
+CREATE TABLE IF NOT EXISTS t_static_page
 (
     id         BIGSERIAL PRIMARY KEY NOT NULL,
     type       VARCHAR(255)          NOT NULL UNIQUE,
     html       TEXT                  NOT NULL
+);
+
+CREATE TABLE IF NOT EXISTS t_language
+(
+    id                   BIGSERIAL PRIMARY KEY NOT NULL,
+    language_name        VARCHAR(255)          NOT NULL UNIQUE ,
+    language_code        VARCHAR(2)            NOT NULL UNIQUE
 );
 
 -----------------------------------
@@ -202,7 +187,7 @@ CREATE TABLE IF NOT EXISTS t_user_to_address
 (
     id          BIGSERIAL PRIMARY KEY         NOT NULL,
     user_id     BIGINT                        NOT NULL,
-    address_id     BIGINT                        NOT NULL,
+    address_id  BIGINT                        NOT NULL,
 
     CONSTRAINT fk_user_id
         FOREIGN KEY(user_id)
@@ -217,7 +202,7 @@ CREATE TABLE IF NOT EXISTS t_user_order
 (
     id          BIGSERIAL PRIMARY KEY         NOT NULL,
     user_id     BIGINT                        NOT NULL,
-    order_id     BIGINT                        NOT NULL,
+    order_id    BIGINT                        NOT NULL,
 
     CONSTRAINT fk_user_id
         FOREIGN KEY(user_id)
