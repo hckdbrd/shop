@@ -18,7 +18,7 @@ VALUES (1, 'Phone Cases', 'Leather Case', 29.99, 100, 'Genuine leather case for 
        (12, 'Tablet Cases', 'Keyboard Case', 59.99, 75, 'Detachable keyboard case for Microsoft Surface', 'Black', 'Microsoft', 'Surface Pro 7', false),
        (13, 'Laptop Cases', 'Rolling Case', 149.99, 20, 'Rolling case with telescopic handle for Lenovo ThinkPad', 'Black', 'Lenovo', 'ThinkPad X1 Carbon', true),
        (14, 'Phone Cases', 'Holster Case', 19.99, 200, 'Rugged holster case for Motorola', 'Black', 'Motorola', 'Moto G Power', false),
-       (15, 'Tablet Cases', 'Slim Case', 19.99, 150, 'Slim case for Huawei MediaPad', 'Rose Gold', 'Huawei', 'MediaPad M5 Lite', true),
+       (15, 'Tablet Cases', 'Slim Case', 19.99, 150, 'Slim case for Huawei MediaPad', 'Rose Gold', 'Huawei', 'MediaPad M5 Lite', true);
 
 INSERT INTO t_feedback(id, user_id,
                        case_id, rating,
@@ -92,7 +92,7 @@ VALUES (1, 'admin', 'Administrator role with full access'),
        (3, 'user', 'User role with basic access'),
        (4, 'guest', 'Guest role with limited access'),
        (5, 'developer', 'Developer role with access to development features'),
-       (6, 'tester', 'Tester role with access to testing features'),
+       (6, 'tester', 'Tester role with access to testing features');
 
 INSERT INTO t_order(id, case_id,
                     quantity, discount,
