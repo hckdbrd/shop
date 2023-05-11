@@ -1,0 +1,21 @@
+spring:
+  datasource:
+    url: jdbc:postgresql://localhost:5444/shop_db
+    username: admin
+    password: admin
+  jpa:
+    show-sql: true
+    hibernate:
+      ddl-auto: create-drop
+    properties:
+      hibernate:
+        format_sql: true
+  flyway:
+    enabled: true
+    locations:
+      classpath:/db/postgres/migration, 
+      classpath:/db/postgres/patch
+
+server:
+  servlet:
+    context-path: /api/v1
