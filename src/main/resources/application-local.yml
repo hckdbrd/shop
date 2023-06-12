@@ -5,17 +5,27 @@ spring:
     password: admin
   jpa:
     show-sql: true
-    hibernate:
-      ddl-auto: create-drop
-    properties:
-      hibernate:
-        format_sql: true
   flyway:
     enabled: true
     locations:
       classpath:/db/postgres/migration, 
       classpath:/db/postgres/patch
+  data:
+    rest:
+      base-path: /api/v1
+      default-page-size: 50
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: "*"
+
+logging:
+  level:
+    org:
+      springframework:
+        security: DEBUG
 
 server:
-  servlet:
-    context-path: /api/v1
+  port: 8081

@@ -1,169 +1,107 @@
-INSERT INTO t_user (first_name,
-                    last_name,
-                    password_hash,
-                    password_salt,
-                    email, phone_number,
-                    avatar_url,
-                    is_locked)
-VALUES ('John', 'Doe',
-        '$2a$10$ZTkbzulPw37L0s4tzdfwoOyD43X.KmbE0z8V7oHJr0DP84cJdd1Z2','$2a$10$ZNkzx7gD/k9J8P7A5v59wO',
-        'john.doe@example.com', NULL, 'https://example.com/avatar.jpg', false),
-       ('Jane', 'Doe',
-        '$2a$10$nPaQuP/NJmCKTb4sL4Yp4.NnEZXyLXJQcG1zAhSedT/kT0zJUbZ4G','$2a$10$gPiEaX23yOn/xjxx3qIXD.',
-        'jane.doe@example.com', NULL, 'https://example.com/avatar.jpg', false),
-       ('Bob', 'Smith',
-        '$2a$10$dfp04wvtLZdml1Pygs7VJ.Gvms.RoqxM/NjDNt0W8RvF.2zlJjw5C','$2a$10$3DEpxKjglzy9i5M7Ed8r0e',
-        NULL, '555 - 555 - 1234 ', 'https://example.com/avatar.jpg', false),
-       ('Alice', 'Johnson',
-        '$2a$10$q5H5Kj2Zi5.xgGR5lOcO1.qFJjKwM1c3qM3oAmMTj8QRZ89sxoyeq','$2a$10$xslz/lr1UQ2jKwRd7ByZ4O',
-        NULL, '555 - 555 - 5678 ', 'https://example.com/avatar.jpg', false),
-       ('Mike', 'Brown',
-        '$2a$10$tD5EX5jHfEz9n69gC8BnW.a1AVGlTpFq3w1EYjKZG6P/IL6Qih9bu','$2a$10$GGNvCJl3q1BCYpKZohAX0e',
-        'mike.brown@example.com', NULL, 'https://example.com/avatar.jpg', false);
-
-INSERT INTO t_role (title,
-                    description)
+INSERT INTO t_role (role_name, description)
 VALUES
-    ('admin', 'Administrator'),
-    ('user', 'Regular user'),
-    ('manager', 'Manager'),
-    ('guest', 'Guest user'),
-    ('developer', 'Developer');
+    ('developer', 'Developer role'),
+    ('admin', 'Administrator role'),
+    ('manager', 'Manager role'),
+    ('staff', 'Staff role'),
+    ('customer', 'Guest role');
 
-INSERT INTO t_case (category,
-                    title,
-                    color,
-                    device_manufacturer,
-                    device_model,
-                    price,
-                    stock_quantity,
-                    description,
-                    is_on_sale)
+INSERT INTO t_user (first_name, last_name, password, email, phone_number, role_id, avatar_url, active)
 VALUES
-    ('phone case', 'Clear Case', 'Clear', 'Apple', 'iPhone 12 Pro', 15.99, 100,
-     'A simple clear case for the iPhone 12 Pro', FALSE),
-    ('phone case', 'Leather Case', 'Brown', 'Samsung', 'Galaxy S21', 29.99, 50,
-     'A premium leather case for the Galaxy S21', TRUE),
-    ('tablet case', 'Folio Case', 'Black', 'Apple', 'iPad Pro', 39.99, 25,
-     'A folio-style case for the iPad Pro', TRUE),
-    ('laptop case', 'Sleeve Case', 'Gray', 'Dell', 'XPS 13', 49.99, 10,
-     'A slim, protective sleeve for the Dell XPS 13', FALSE),
-    ('smartwatch case', 'Bumper Case', 'Red', 'Fitbit', 'Versa 3', 9.99, 200,
-     'A colorful bumper case for the Fitbit Versa 3', TRUE);
+    ('John', 'Doe', '{bcrypt}$2a$12$f4qS5fm6ImWr1SsY2aC71eesJQ.DumoyGxMIYYAAupM7LwoA5XzaS', 'john.doe@example.com', NULL, 1, 'https://example.com/avatar1.jpg', true),
+    ('Jane', 'Smith', '{bcrypt}$2a$12$f4qS5fm6ImWr1SsY2aC71eesJQ.DumoyGxMIYYAAupM7LwoA5XzaS', NULL, '555-123-4567', 2, 'https://example.com/avatar2.jpg', true),
+    ('Alice', 'Johnson', '{bcrypt}$2a$12$f4qS5fm6ImWr1SsY2aC71eesJQ.DumoyGxMIYYAAupM7LwoA5XzaS', 'alice.johnson@example.com', '555-987-6543', 3, NULL, true),
+    ('Robert', 'Brown', '{bcrypt}$2a$12$f4qS5fm6ImWr1SsY2aC71eesJQ.DumoyGxMIYYAAupM7LwoA5XzaS', 'robert.brown@example.com', '555-555-5555', 4, 'https://example.com/avatar4.jpg', true),
+    ('Emily', 'Davis', '{bcrypt}$2a$12$f4qS5fm6ImWr1SsY2aC71eesJQ.DumoyGxMIYYAAupM7LwoA5XzaS', 'emily.davis@example.com', NULL, 5, NULL, true);
 
-INSERT INTO t_country (country_name,
-                       iso_code_2,
-                       iso_code_3)
+INSERT INTO t_device_case (category, case_name, color, device_manufacturer, device_model, price, discount, quantity, description, available)
+VALUES
+    ('Phone Case', 'Slim Fit', 'Black', 'Apple', 'iPhone 12', 19.99, 10, 50, 'Slim fit phone case for iPhone 12', TRUE),
+    ('Phone Case', 'Rugged Armor', 'Blue', 'Samsung', 'Galaxy S20', 24.99, 5, 30, 'Rugged armor phone case for Galaxy S20', TRUE),
+    ('Tablet Case', 'Folio Cover', 'Red', 'Apple', 'iPad Air', 29.99, NULL, 20, 'Folio cover case for iPad Air', FALSE),
+    ('Laptop Case', 'Neoprene Sleeve', 'Gray', 'Dell', 'XPS 13', 34.99, 20, 15, 'Neoprene sleeve case for Dell XPS 13', TRUE),
+    ('Phone Case', 'Clear Transparent', 'Transparent', 'Google', 'Pixel 5', 14.99, 15, 40, 'Clear transparent phone case for Google Pixel 5', TRUE);
+
+INSERT INTO t_country (country_name, iso_code_2, iso_code_3)
 VALUES
     ('United States', 'US', 'USA'),
     ('Canada', 'CA', 'CAN'),
-    ('Mexico', 'MX', 'MEX'),
     ('United Kingdom', 'GB', 'GBR'),
-    ('Australia', 'AU', 'AUS');
+    ('Australia', 'AU', 'AUS'),
+    ('Germany', 'DE', 'DEU');
 
-INSERT INTO t_shipping_service (service_name,
-                                country_id,
-                                is_available)
+INSERT INTO t_address (user_id, country_id, state_name, city_name, street_name)
 VALUES
-    ('FedEx Express', 1, TRUE),
-    ('UPS Worldwide Expedited', 2, TRUE),
-    ('DHL Express Worldwide', 3, FALSE),
-    ('USPS Priority Mail International', 4, TRUE),
-    ('Australia Post International Express', 5, TRUE);
+    (1, 1, 'California', 'Los Angeles', '123 Main Street'),
+    (1, 2, 'New York', 'New York City', '456 Broadway'),
+    (2, 3, 'London', 'London', '789 Oxford Street'),
+    (3, 4, 'Sydney', 'Sydney', '321 George Street'),
+    (3, 1, 'California', 'San Francisco', '987 Market Street'),
+    (4, 2, 'New York', 'Albany', '654 State Street'),
+    (5, 3, 'London', 'Birmingham', '246 High Street'),
+    (5, 4, 'Sydney', 'Melbourne', '135 Collins Street'),
+    (5, 1, 'California', 'San Diego', '876 Broadway Avenue'),
+    (5, 2, 'New York', 'Rochester', '543 Main Street');
 
-INSERT INTO t_order (case_id,
-                     quantity,
-                     discount,
-                     sum_checkout,
-                     shipping_service_id)
+INSERT INTO t_order (user_id, address_id, total)
 VALUES
-    (1, 2, 0, 59.98, 1),
-    (2, 1, 10, 44.99, 1),
-    (3, 3, 0, 134.97, 2),
-    (4, 1, 5, 47.49, 3),
-    (5, 2, 0, 79.98, 4);
+    (1, 1, 50.99),
+    (1, 2, 75.50),
+    (2, 3, 20.25),
+    (3, 4, 100.00),
+    (3, 5, 45.75),
+    (4, 6, 60.50),
+    (5, 7, 35.25),
+    (5, 8, 90.99),
+    (5, 9, 70.75),
+    (5, 10, 55.25);
 
-INSERT INTO t_feedback (user_id,
-                        case_id,
-                        rating,
-                        description)
+INSERT INTO t_order_item (order_id, device_case_id, quantity)
 VALUES
-    (1, 2, 4, 'I really liked this phone case. It looks great and fits well.'),
-    (3, 4, 3, 'The case is okay, but it doesn''t offer much protection.'),
-    (2, 1, 5, 'This is the best phone case I''ve ever owned. It looks awesome and feels very durable.'),
-    (4, 3, 2, 'I didn''t like the design of this case.'),
-    (1, 5, 4, 'This case is fantastic! It fits my phone perfectly and looks great.');
+    (1, 1, 2),
+    (1, 1, 1),
+    (2, 2, 3),
+    (2, 2, 1),
+    (3, 3, 1),
+    (3, 3, 2),
+    (4, 4, 4),
+    (4, 4, 3),
+    (5, 5, 2),
+    (5, 5, 1);
 
-INSERT INTO t_feedback_photos(feedback_id,
-                              photo_url)
+INSERT INTO t_feedback (user_id, device_case_id, rating, description)
 VALUES
-    (1, 'https://example.com/feedback1/photo1.jpg'),
-    (2, 'https://example.com/feedback2/photo1.jpg'),
-    (3, 'https://example.com/feedback3/photo1.jpg'),
-    (4, 'https://example.com/feedback4/photo1.jpg'),
-    (5, 'https://example.com/feedback5/photo1.jpg');
+    (1, 1, 5, 'Great case, excellent quality!'),
+    (2, 2, 4, 'Good case, fits well on my phone.'),
+    (3, 3, 3, 'Average case, nothing special.'),
+    (4, 4, 2, 'Disappointed with the quality.'),
+    (5, 5, 1, 'Terrible case, do not recommend.');
 
-INSERT INTO t_address (country_id,
-                       city_name,
-                       street_name)
+INSERT INTO t_feedback_photos (feedback_id, photo_url)
 VALUES
-    (1, 'New York', '123 Main St'),
-    (2, 'London', '456 Oxford St'),
-    (3, 'Paris', '789 Champs-Élysées'),
-    (4, 'Tokyo', '1-1-1 Shibuya'),
-    (5, 'Sydney', '10 George St');
+    (1, 'https://example.com/photo1.jpg'),
+    (1, 'https://example.com/photo2.jpg'),
+    (2, 'https://example.com/photo3.jpg'),
+    (3, 'https://example.com/photo4.jpg'),
+    (4, 'https://example.com/photo5.jpg'),
+    (5, 'https://example.com/photo6.jpg'),
+    (5, 'https://example.com/photo7.jpg');
 
-INSERT INTO t_shop_social_media (social_media_name,
-                                 media_url,
-                                 icon_url)
+INSERT INTO t_shop_social_media (social_media_name, media_url, icon_url)
 VALUES
-    ('Facebook', 'https://www.facebook.com/mystore/', 'https://cdn.example.com/icons/facebook.png'),
-    ('Twitter', 'https://twitter.com/mystore/', 'https://cdn.example.com/icons/twitter.png'),
-    ('Instagram', 'https://www.instagram.com/mystore/', 'https://cdn.example.com/icons/instagram.png'),
-    ('Pinterest', 'https://www.pinterest.com/mystore/', 'https://cdn.example.com/icons/pinterest.png'),
-    ('YouTube', 'https://www.youtube.com/mystore/', 'https://cdn.example.com/icons/youtube.png');
+    ('Facebook', 'https://facebook.com/shop', 'https://example.com/facebook-icon.png'),
+    ('Twitter', 'https://twitter.com/shop', 'https://example.com/twitter-icon.png'),
+    ('Instagram', 'https://instagram.com/shop', 'https://example.com/instagram-icon.png');
 
-INSERT INTO t_static_page (type,
-                           html)
+INSERT INTO t_static_page (page_type, html)
 VALUES
-    ('about_us', '<html><body><h1>About Us</h1><p>We are a company that specializes in selling phone cases.</p></body></html>'),
-    ('shipping_info', '<html><body><h1>Shipping Information</h1><p>We offer free shipping for all orders over $50.</p></body></html>'),
-    ('return_policy', '<html><body><h1>Return Policy</h1><p>We offer a 30-day return policy for all products.</p></body></html>'),
-    ('privacy_policy', '<html><body><h1>Privacy Policy</h1><p>We are committed to protecting your privacy and personal information.</p></body></html>'),
-    ('terms_of_service', '<html><body><h1>Terms of Service</h1><p>By using our website, you agree to our terms of service.</p></body></html>');
+    ('About Us', '<h1>About Us</h1><p>Welcome to our shop!</p>'),
+    ('Contact Us', '<h1>Contact Us</h1><p>Get in touch with us.</p>'),
+    ('Terms and Conditions', '<h1>Terms and Conditions</h1><p>Read our terms and conditions.</p>');
 
-INSERT INTO t_language (language_name,
-                        language_code)
+INSERT INTO t_language (language_name, language_code)
 VALUES
     ('English', 'en'),
-    ('French', 'fr'),
     ('Spanish', 'es'),
-    ('German', 'de'),
-    ('Japanese', 'ja');
+    ('French', 'fr');
 
-INSERT INTO t_user_to_role (user_id,
-                            role_id)
-VALUES
-    (1, 1),
-    (1, 2),
-    (2, 2),
-    (3, 3),
-    (4, 2);
-
-INSERT INTO t_user_to_address(user_id,
-                              address_id)
-VALUES
-    (1, 2),
-    (2, 4),
-    (3, 3),
-    (4, 1),
-    (5, 5);
-
-INSERT INTO t_user_order (user_id,
-                          order_id)
-VALUES
-    (1, 2),
-    (2, 4),
-    (3, 1),
-    (1, 3),
-    (4, 5);
